@@ -1,9 +1,9 @@
-import Form from './pages/index'
+import Test from './pages/index'
 
 function App() {
   return (
     <div>
-      <Form/>
+      <Test/>
     </div>
   );
 }
