@@ -1,22 +1,22 @@
 import React from 'react';
+import './style.css'
 
 const Form = ({formData}) => {
     const keys = Object.keys(formData);
 
-
-    const inputGenerator = (data, key) => {
-      const type = data[key].type;
+    const inputGenerator = (data) => {
+      const {type, groupName, options }= data;
 
       const cases = {
-        radio: data[key].options?.map(option => {
+        radio: options?.map(option => {
           return(
             <div key={option}>
-              <input type='radio' name={data[key].groupName} value={option}/>
+              <input type='radio' name={groupName} value={option}/>
               <label>{option}</label>
             </div>
           )
         }),
-        checkbox: data[key].options?.map(option => {
+        checkbox: options?.map(option => {
           return(
             <div key={option}>
               <input type='checkbox' name={option} value={option}/>
@@ -25,11 +25,11 @@ const Form = ({formData}) => {
           )
         }),
         'dropdown-list':
-            <>
-              <label>Choose a {data[key].groupName}:</label>
-              <select name={data[key].groupName} id={data[key].groupName}>
+            <div>
+              <label>Choose a {groupName}:</label>
+              <select name={groupName} id={groupName}>
                 {
-                  data[key].options?.map(listItem => {
+                  options?.map(listItem => {
                     return(
                       <option key={listItem} value={listItem}>
                         {listItem}
@@ -38,7 +38,7 @@ const Form = ({formData}) => {
                   })
                 }
               </select>
-            </>
+            </div>
       };
 
       const defaultInput = <input type={type}/>
@@ -47,20 +47,21 @@ const Form = ({formData}) => {
       return value;
     }
     return(
-        <>
+        <form>
           {
             keys.map(
               (key) => {
+                let formItem = formData[key]
                 return(
                   <div key={key}>
-                    <h1>{formData[key].question}</h1>
-                    {inputGenerator(formData, key)}
+                    <p className='question'>{formItem.question}</p>
+                    {inputGenerator(formItem)}
                   </div>
                 )
               }
             )
           }
-        </>
+        </form>
     )
 };
 
