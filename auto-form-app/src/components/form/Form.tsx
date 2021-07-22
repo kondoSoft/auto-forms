@@ -1,14 +1,34 @@
 import React from 'react';
 import './style.css'
 
-const Form = ({formData}) => {
+interface dataTypeItem {
+  question: string,
+  isRequired: boolean,
+  validation?: () => {},
+  type: string,
+  groupName?: string,
+  options?: string[]
+}
+
+interface dataType {
+  [key: string]: dataTypeItem
+}
+
+interface casesType {
+  [key: string]: JSX.Element[] |JSX.Element | undefined
+  // 'radio': JSX.Element[] | undefined
+  // 'checkbox': JSX.Element[] | undefined
+  // 'dropdown-list': JSX.Element
+}
+
+const Form = ({formData}: {formData: dataType}) => {
     const keys = Object.keys(formData);
 
-    const inputGenerator = (data) => {
+    const inputGenerator = (data: dataTypeItem) => {
       const {type, groupName, options }= data;
 
-      const cases = {
-        radio: options?.map(option => {
+      const cases: casesType = {
+        'radio': options?.map((option: string) => {
           return(
             <div key={option}>
               <input type='radio' name={groupName} value={option}/>
@@ -16,7 +36,7 @@ const Form = ({formData}) => {
             </div>
           )
         }),
-        checkbox: options?.map(option => {
+        'checkbox': options?.map((option: string)=> {
           return(
             <div key={option}>
               <input type='checkbox' name={option} value={option}/>
@@ -29,7 +49,7 @@ const Form = ({formData}) => {
               <label>Choose a {groupName}:</label>
               <select name={groupName} id={groupName}>
                 {
-                  options?.map(listItem => {
+                  options?.map((listItem: string) => {
                     return(
                       <option key={listItem} value={listItem}>
                         {listItem}
