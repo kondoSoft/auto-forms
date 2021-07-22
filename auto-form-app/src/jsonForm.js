@@ -3,7 +3,7 @@ const data = {
         question: 'What is your name?',
         isRequired: true,
         validation: () => 'validating...',
-        type: 'number'
+        type: 'Text'
     },
     item2: {
         question: 'Sex',

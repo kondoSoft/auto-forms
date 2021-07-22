@@ -1,5 +1,14 @@
 import React from 'react';
-import './style.css'
+import './style.tsx';
+import {
+  Text,
+  Test,
+  QContainer,
+  Container,
+  Input,
+  OptContainer,
+  Label
+} from './style'
 
 interface dataTypeItem {
   question: string,
@@ -30,18 +39,18 @@ const Form = ({formData}: {formData: dataType}) => {
       const cases: casesType = {
         'radio': options?.map((option: string) => {
           return(
-            <div key={option}>
+            <OptContainer key={option}>
               <input type='radio' name={groupName} value={option}/>
-              <label>{option}</label>
-            </div>
+              <Label>{option}</Label>
+            </OptContainer>
           )
         }),
         'checkbox': options?.map((option: string)=> {
           return(
-            <div key={option}>
+            <OptContainer key={option}>
               <input type='checkbox' name={option} value={option}/>
-              <label>{option}</label>
-            </div>
+              <Label>{option}</Label>
+            </OptContainer>
           )
         }),
         'dropdown-list':
@@ -61,27 +70,29 @@ const Form = ({formData}: {formData: dataType}) => {
             </div>
       };
 
-      const defaultInput = <input type={type}/>
+      const defaultInput = <Input type={type}/>
 
       const value = cases[type] || defaultInput;
       return value;
     }
     return(
-        <form>
-          {
+        <Test>
+         {
             keys.map(
               (key) => {
                 let formItem = formData[key]
                 return(
-                  <div key={key}>
-                    <p className='question'>{formItem.question}</p>
+                 <Container>
+                    <QContainer key={key}>
+                    <Text>{formItem.question}</Text>
                     {inputGenerator(formItem)}
-                  </div>
+                  </QContainer>
+                 </Container>
                 )
               }
             )
           }
-        </form>
+        </Test>
     )
 };
 
