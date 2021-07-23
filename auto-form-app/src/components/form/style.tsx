@@ -28,17 +28,21 @@ width: 100%;
 font-size: 25px;
 border: none;
 color: ${themeColor};
-border-bottom: 2px solid ${themeColor} ;
+border-bottom: 2px solid rgba(255, 164, 99, .5);
 background: transparent;
 :focus {
         outline: none;
+        border-bottom: 2px solid ${themeColor} ;
     }
+::placeholder {
+    color: rgba(255, 164, 99, .5);
+}
 `
 export const OptContainer = styled.div`
 width: 25%;
 margin-bottom: 10px;
 padding: 15px 30px 15px 0;
-border: 2px ${themeColor} solid;
+border: 3px ${themeColor} solid;
 border-radius: 5px;
 background-color: rgba(255, 164, 99, .3);
 `

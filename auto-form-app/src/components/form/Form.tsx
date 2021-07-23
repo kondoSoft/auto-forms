@@ -70,7 +70,7 @@ const Form = ({formData}: {formData: dataType}) => {
             </div>
       };
 
-      const defaultInput = <Input type={type}/>
+      const defaultInput = <Input type={type} placeholder='Type your answer here...'/>
 
       const value = cases[type] || defaultInput;
       return value;
