@@ -2,9 +2,9 @@ import React from 'react';
 import './style.tsx';
 import {
   Text,
-  Test,
-  QContainer,
   Container,
+  Tile,
+  Question,
   Input,
   OptContainer,
   Label,
@@ -65,7 +65,7 @@ const Form = ({formData}: {formData: dataType}) => {
                   options?.map((listItem: string) => {
                     return(
                       <Option key={listItem} value={listItem}>
-                        {listItem}
+                       {listItem}
                       </Option>
                     )
                   })
@@ -81,7 +81,7 @@ const Form = ({formData}: {formData: dataType}) => {
       return value;
     }
     return(
-        <Test>
+        <Container>
          {
             keys.map(
               (key) => {
@@ -89,8 +89,8 @@ const Form = ({formData}: {formData: dataType}) => {
                 let options = formItem.options?.length || 0
                 let type = formItem.type
                 return(
-                 <Container>
-                    <QContainer key={key}>
+                 <Tile>
+                    <Question key={key}>
                     <Text>{formItem.question}</Text>
                     {
                       (type==="checkbox" || type==="radio") ?
@@ -100,13 +100,13 @@ const Form = ({formData}: {formData: dataType}) => {
                           </InputContainer>
                         ): inputGenerator(formItem)
                     }
-                  </QContainer>
-                 </Container>
+                  </Question>
+                 </Tile>
                 )
               }
             )
           }
-        </Test>
+        </Container>
     )
 };
 
