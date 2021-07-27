@@ -3,7 +3,7 @@ const data = {
         question: 'What is your name?',
         isRequired: true,
         validation: () => 'validating...',
-        type: 'number'
+        type: 'date'
     },
     item2: {
         question: 'Sex',
@@ -32,7 +32,7 @@ const data = {
         isRequired: true,
         validation: () => 'validating...',
         type: 'checkbox',
-        options: ['Brown', 'Black', 'white', 'Grey', 'Red Hair']
+        options: ['Brown', 'Black', 'white', 'Grey', 'Red Hair','Brown', 'Black', 'white', 'Grey', 'Red Hair']
     }
 }
 

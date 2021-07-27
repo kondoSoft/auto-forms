@@ -1,5 +1,18 @@
 import React from 'react';
-import './style.css'
+import './style.tsx';
+import {
+  Text,
+  Container,
+  Tile,
+  Question,
+  Input,
+  OptContainer,
+  Label,
+  InputContainer,
+  Date,
+  Select,
+  Option
+} from './style'
 
 interface dataTypeItem {
   question: string,
@@ -30,58 +43,70 @@ const Form = ({formData}: {formData: dataType}) => {
       const cases: casesType = {
         'radio': options?.map((option: string) => {
           return(
-            <div key={option}>
+            <OptContainer key={option} size={options.length}>
               <input type='radio' name={groupName} value={option}/>
-              <label>{option}</label>
-            </div>
+              <Label>{option}</Label>
+            </OptContainer>
           )
         }),
         'checkbox': options?.map((option: string)=> {
           return(
-            <div key={option}>
+            <OptContainer key={option} size={options.length}>
               <input type='checkbox' name={option} value={option}/>
-              <label>{option}</label>
-            </div>
+              <Label>{option}</Label>
+            </OptContainer>
           )
         }),
         'dropdown-list':
             <div>
-              <label>Choose a {groupName}:</label>
-              <select name={groupName} id={groupName}>
+              <Text>Choose a {groupName}:</Text>
+              <Select name={groupName} id={groupName}>
                 {
                   options?.map((listItem: string) => {
                     return(
-                      <option key={listItem} value={listItem}>
-                        {listItem}
-                      </option>
+                      <Option key={listItem} value={listItem}>
+                       {listItem}
+                      </Option>
                     )
                   })
                 }
-              </select>
-            </div>
+              </Select>
+            </div>,
+          'date': <Date type={'date'}/>
       };
 
-      const defaultInput = <input type={type}/>
+      const defaultInput = <Input type={type} placeholder='Type your answer here...'/>
 
       const value = cases[type] || defaultInput;
       return value;
     }
     return(
-        <form>
-          {
+        <Container>
+         {
             keys.map(
               (key) => {
                 let formItem = formData[key]
+                let options = formItem.options?.length || 0
+                let type = formItem.type
                 return(
-                  <div key={key}>
-                    <p className='question'>{formItem.question}</p>
-                    {inputGenerator(formItem)}
-                  </div>
+                 <Tile>
+                    <Question key={key}>
+                    <Text>{formItem.question}</Text>
+                    {
+                      (type==="checkbox" || type==="radio") ?
+                        (
+                          <InputContainer size={options}>
+                            {inputGenerator(formItem)}
+                          </InputContainer>
+                        ): inputGenerator(formItem)
+                    }
+                  </Question>
+                 </Tile>
                 )
               }
             )
           }
-        </form>
+        </Container>
     )
 };
 
