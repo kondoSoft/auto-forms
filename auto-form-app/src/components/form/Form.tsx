@@ -7,7 +7,11 @@ import {
   Container,
   Input,
   OptContainer,
-  Label
+  Label,
+  InputContainer,
+  Date,
+  Select,
+  Option
 } from './style'
 
 interface dataTypeItem {
@@ -39,7 +43,7 @@ const Form = ({formData}: {formData: dataType}) => {
       const cases: casesType = {
         'radio': options?.map((option: string) => {
           return(
-            <OptContainer key={option}>
+            <OptContainer key={option} size={options.length}>
               <input type='radio' name={groupName} value={option}/>
               <Label>{option}</Label>
             </OptContainer>
@@ -47,7 +51,7 @@ const Form = ({formData}: {formData: dataType}) => {
         }),
         'checkbox': options?.map((option: string)=> {
           return(
-            <OptContainer key={option}>
+            <OptContainer key={option} size={options.length}>
               <input type='checkbox' name={option} value={option}/>
               <Label>{option}</Label>
             </OptContainer>
@@ -55,19 +59,20 @@ const Form = ({formData}: {formData: dataType}) => {
         }),
         'dropdown-list':
             <div>
-              <label>Choose a {groupName}:</label>
-              <select name={groupName} id={groupName}>
+              <Text>Choose a {groupName}:</Text>
+              <Select name={groupName} id={groupName}>
                 {
                   options?.map((listItem: string) => {
                     return(
-                      <option key={listItem} value={listItem}>
+                      <Option key={listItem} value={listItem}>
                         {listItem}
-                      </option>
+                      </Option>
                     )
                   })
                 }
-              </select>
-            </div>
+              </Select>
+            </div>,
+          'date': <Date type={'date'}/>
       };
 
       const defaultInput = <Input type={type} placeholder='Type your answer here...'/>
@@ -81,11 +86,20 @@ const Form = ({formData}: {formData: dataType}) => {
             keys.map(
               (key) => {
                 let formItem = formData[key]
+                let options = formItem.options?.length || 0
+                let type = formItem.type
                 return(
                  <Container>
                     <QContainer key={key}>
                     <Text>{formItem.question}</Text>
-                    {inputGenerator(formItem)}
+                    {
+                      (type==="checkbox" || type==="radio") ?
+                        (
+                          <InputContainer size={options}>
+                            {inputGenerator(formItem)}
+                          </InputContainer>
+                        ): inputGenerator(formItem)
+                    }
                   </QContainer>
                  </Container>
                 )
