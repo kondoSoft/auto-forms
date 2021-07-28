@@ -1,5 +1,5 @@
-import React, { ChangeEvent } from 'react';
-import { useForm, Controller } from "react-hook-form";
+import React from 'react';
+import { useForm } from "react-hook-form";
 import './style.tsx';
 import {
   Text,
@@ -39,9 +39,6 @@ interface casesType {
 const Form = ({formData}: {formData: dataType}) => {
 
   const { register, handleSubmit } = useForm();
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-      console.log('change', event.target.value)
-  }
   const onSubmit = (data: {Colors: string[]})  => {
     alert(JSON.stringify(data));
   };
@@ -53,18 +50,26 @@ const Form = ({formData}: {formData: dataType}) => {
       const cases: casesType = {
         'radio': options?.map((option: string) => {
           return(
-            <OptContainer key={option} size={options.length}>
-              <input type='radio' value={option} { ...register(`${name}`)}/>
-              <Label>{option}</Label>
-            </OptContainer>
+            <Label>
+                <OptContainer key={option} size={options.length}>
+                  <input type='radio' value={option} { ...register(`${name}`)}/>
+                  {option}
+                </OptContainer>
+            </Label>
           )
         }),
         'checkbox': options?.map((option: string)=> {
           return(
-            <OptContainer key={option} size={options.length}>
-              <input type='checkbox'  value={option}  { ...register(`${name}`)} />
-              <Label>{option}</Label>
-            </OptContainer>
+            <Label>
+                <OptContainer key={option} size={options.length}>
+                  <input
+                    type='checkbox'
+                    value={option}
+                    { ...register(`${name}`)}
+                  />
+                  {option}
+                </OptContainer>
+            </Label>
           )
         }),
         'dropdown-list':
