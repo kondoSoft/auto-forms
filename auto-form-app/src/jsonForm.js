@@ -3,14 +3,15 @@ const data = {
         question: 'What is your name?',
         isRequired: true,
         validation: () => 'validating...',
-        type: 'date'
+        type: 'date',
+        name: 'name'
     },
     item2: {
         question: 'Sex',
         isRequired: true,
         validation: () => 'validating...',
         type: 'radio',
-        groupName: 'Sex',
+        name: 'Sex',
         options: ['Male', 'Female']
     },
     item3: {
@@ -18,7 +19,7 @@ const data = {
         isRequired: true,
         validation: () => 'validating...',
         type: 'dropdown-list',
-        groupName: 'Ice Cream Flavors',
+        name: 'Ice Cream Flavors',
         options: [
             'Chocolate',
             'Vanilla',
@@ -32,6 +33,7 @@ const data = {
         isRequired: true,
         validation: () => 'validating...',
         type: 'checkbox',
+        name: 'colors',
         options: ['Brown', 'Black', 'white', 'Grey', 'Red Hair','Brown', 'Black', 'white', 'Grey', 'Red Hair']
     }
 }
