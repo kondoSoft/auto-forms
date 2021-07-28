@@ -34,7 +34,7 @@ const data = {
         validation: () => 'validating...',
         type: 'checkbox',
         name: 'colors',
-        options: ['Brown', 'Black', 'white', 'Grey', 'Red Hair','Brown', 'Black', 'white', 'Grey', 'Red Hair']
+        options: ['Brown', 'Black', 'white', 'Grey', 'Red Hair']
     }
 }
 
