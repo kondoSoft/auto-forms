@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
+import { useForm, Controller } from "react-hook-form";
 import './style.tsx';
 import {
   Text,
@@ -11,7 +12,8 @@ import {
   InputContainer,
   Date,
   Select,
-  Option
+  Option,
+  Submit
 } from './style'
 
 interface dataTypeItem {
@@ -19,7 +21,7 @@ interface dataTypeItem {
   isRequired: boolean,
   validation?: () => {},
   type: string,
-  groupName?: string,
+  name: string,
   options?: string[]
 }
 
@@ -35,16 +37,24 @@ interface casesType {
 }
 
 const Form = ({formData}: {formData: dataType}) => {
+
+  const { register, handleSubmit } = useForm();
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+      console.log('change', event.target.value)
+  }
+  const onSubmit = (data: {Colors: string[]})  => {
+    alert(JSON.stringify(data));
+  };
     const keys = Object.keys(formData);
 
     const inputGenerator = (data: dataTypeItem) => {
-      const {type, groupName, options }= data;
+      const {type, name, options }= data;
 
       const cases: casesType = {
         'radio': options?.map((option: string) => {
           return(
             <OptContainer key={option} size={options.length}>
-              <input type='radio' name={groupName} value={option}/>
+              <input type='radio' value={option} { ...register(`${name}`)}/>
               <Label>{option}</Label>
             </OptContainer>
           )
@@ -52,15 +62,15 @@ const Form = ({formData}: {formData: dataType}) => {
         'checkbox': options?.map((option: string)=> {
           return(
             <OptContainer key={option} size={options.length}>
-              <input type='checkbox' name={option} value={option}/>
+              <input type='checkbox'  value={option}  { ...register(`${name}`)} />
               <Label>{option}</Label>
             </OptContainer>
           )
         }),
         'dropdown-list':
             <div>
-              <Text>Choose a {groupName}:</Text>
-              <Select name={groupName} id={groupName}>
+              <Text>Choose a {name}:</Text>
+              <Select {...register(`${name}`)}>
                 {
                   options?.map((listItem: string) => {
                     return(
@@ -72,16 +82,16 @@ const Form = ({formData}: {formData: dataType}) => {
                 }
               </Select>
             </div>,
-          'date': <Date type={'date'}/>
+          'date': <Date type={'date'} {...register(`${name}`)}/>
       };
 
-      const defaultInput = <Input type={type} placeholder='Type your answer here...'/>
+      const defaultInput = <Input type={type} placeholder='Type your answer here...' {...register(`${name}`)}/>
 
       const value = cases[type] || defaultInput;
       return value;
     }
     return(
-        <Container>
+        <Container onSubmit={handleSubmit(onSubmit)}>
          {
             keys.map(
               (key) => {
@@ -106,6 +116,9 @@ const Form = ({formData}: {formData: dataType}) => {
               }
             )
           }
+          < Submit
+            type='submit'
+          />
         </Container>
     )
 };

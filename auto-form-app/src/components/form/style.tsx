@@ -120,3 +120,7 @@ background-color: ${white};
 color: #000000;
 padding: 20px;
 `
+
+export const Submit = styled.input`
+
+`
