@@ -88,7 +88,6 @@ font-size: 25px;
 border: none;
 color: rgba(${themeColor});
 background-color: rgba(${themeColor}, .5);
-background: transparent;
 padding-bottom: 10px;
 :focus {
         outline: none;
@@ -122,5 +121,19 @@ padding: 20px;
 `
 
 export const Submit = styled.input`
-
+padding: 20px 60px;
+border: solid 4px #A76EC7;
+border-radius: 5px;
+background: #732E99;
+color: ${white};
+font-weight: bold;
+font-family: inherit;
+font-size: inherit;
+margin-top: 15px;
+transition: background 2s;
+:hover {
+    cursor: pointer;
+    background: #A76EC7;
+    border: solid 4px #732E99;
+}
 `

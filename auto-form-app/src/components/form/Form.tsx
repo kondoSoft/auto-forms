@@ -1,6 +1,8 @@
-import React, { ChangeEvent } from 'react';
-import { useForm, Controller } from "react-hook-form";
+import React, {useState} from 'react';
+import { useForm } from "react-hook-form";
 import './style.tsx';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 import {
   Text,
   Container,
@@ -16,10 +18,17 @@ import {
   Submit
 } from './style'
 
+const schema = yup.object().shape({
+    name: yup.string().required(),
+    sex: yup.string().required(),
+    'Ice Cream Flavors': yup.string().required(),
+    colors: yup.array().required(),
+})
+
 interface dataTypeItem {
   question: string,
   isRequired: boolean,
-  validation?: () => {},
+  validation?: string[],
   type: string,
   name: string,
   options?: string[]
@@ -35,15 +44,16 @@ interface casesType {
   // 'checkbox': JSX.Element[] | undefined
   // 'dropdown-list': JSX.Element
 }
+type stateType = string[]
 
 const Form = ({formData}: {formData: dataType}) => {
 
-  const { register, handleSubmit } = useForm();
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-      console.log('change', event.target.value)
-  }
-  const onSubmit = (data: {Colors: string[]})  => {
-    alert(JSON.stringify(data));
+  const [optionArray, setOptionArray ] = useState<stateType> ([])
+  const { register, handleSubmit, formState:{ errors }, setValue } = useForm(
+    {resolver: yupResolver(schema)}
+  );
+  const onSubmit = (data: any) => {
+    console.log(data);
   };
     const keys = Object.keys(formData);
 
@@ -51,20 +61,50 @@ const Form = ({formData}: {formData: dataType}) => {
       const {type, name, options }= data;
 
       const cases: casesType = {
-        'radio': options?.map((option: string) => {
+        'radio': options?.map((option: string, index: number) => {
           return(
-            <OptContainer key={option} size={options.length}>
-              <input type='radio' value={option} { ...register(`${name}`)}/>
-              <Label>{option}</Label>
-            </OptContainer>
+            <>
+              <OptContainer key={option} size={options.length} onClick={() => setValue(name, option)}>
+                <input type='radio' id={option} value={option} {...register(name)} />
+                <Label htmlFor={option}>{option}</Label>
+              </OptContainer>
+              { (options.length -1) === index && <p>{errors[name]?.message}</p>}
+            </>
+
           )
         }),
-        'checkbox': options?.map((option: string)=> {
+        'checkbox': options?.map((option: string, index: number)=> {
+          function check (value:string) {
+            optionArray?.includes(value) ?  setOptionArray(prevOptions => {
+              const optionFilter = optionArray.filter(i => {
+                return i !== value
+              })
+              setValue(name, optionFilter);
+              return optionFilter
+            }): setOptionArray(prevOptions => {
+              setValue(name, [...optionArray, value]);
+              return [...optionArray, value]
+            })
+
+          }
           return(
-            <OptContainer key={option} size={options.length}>
-              <input type='checkbox'  value={option}  { ...register(`${name}`)} />
-              <Label>{option}</Label>
-            </OptContainer>
+            <>
+                <OptContainer key={option} size={options.length}
+                  onClick={() => {
+                    check(option);
+
+                  }}
+                >
+                  <input
+                    type='checkbox'
+                    id={option}
+                    value={option}
+                    { ...register(name)}
+                  />
+                  <Label>{option}</Label>
+                </OptContainer>
+            { (options.length -1) === index && <p>{errors[name]?.message}</p>}
+            </>
           )
         }),
         'dropdown-list':
@@ -77,12 +117,17 @@ const Form = ({formData}: {formData: dataType}) => {
                       <Option key={listItem} value={listItem}>
                        {listItem}
                       </Option>
+
                     )
                   })
                 }
               </Select>
+              <p>{errors[name]?.message}</p>
             </div>,
-          'date': <Date type={'date'} {...register(`${name}`)}/>
+          'date': <>
+                    <Date type={'date'} {...register(`${name}`)}/>
+                    <p>{errors[name]?.message}</p>
+                  </>
       };
 
       const defaultInput = <Input type={type} placeholder='Type your answer here...' {...register(`${name}`)}/>
@@ -94,7 +139,7 @@ const Form = ({formData}: {formData: dataType}) => {
         <Container onSubmit={handleSubmit(onSubmit)}>
          {
             keys.map(
-              (key) => {
+              (key, index) => {
                 let formItem = formData[key]
                 let options = formItem.options?.length || 0
                 let type = formItem.type
@@ -110,15 +155,15 @@ const Form = ({formData}: {formData: dataType}) => {
                           </InputContainer>
                         ): inputGenerator(formItem)
                     }
+                    {
+                      (keys.length - 1 === index) && <Submit type='submit' />
+                    }
                   </Question>
                  </Tile>
                 )
               }
             )
           }
-          < Submit
-            type='submit'
-          />
         </Container>
     )
 };
