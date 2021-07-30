@@ -2,14 +2,14 @@ const data = {
     item: {
         question: 'What is your name?',
         isRequired: true,
-        validation: () => 'validating...',
+        validation: ['required', 'string',],
         type: 'date',
         name: 'name'
     },
     item2: {
         question: 'Sex',
         isRequired: true,
-        validation: () => 'validating...',
+        validation: ['required'],
         type: 'radio',
         name: 'Sex',
         options: ['Male', 'Female']
@@ -17,7 +17,7 @@ const data = {
     item3: {
         question: "What's your favorite flavor?",
         isRequired: true,
-        validation: () => 'validating...',
+        validation:  ['required'],
         type: 'dropdown-list',
         name: 'Ice Cream Flavors',
         options: [
@@ -31,7 +31,7 @@ const data = {
     item4: {
         question: 'Colors',
         isRequired: true,
-        validation: () => 'validating...',
+        validation: ['required'],
         type: 'checkbox',
         name: 'colors',
         options: ['Brown', 'Black', 'white', 'Grey', 'Red Hair']
