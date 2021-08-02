@@ -15,7 +15,8 @@ import {
   Date,
   Select,
   Option,
-  Submit
+  Submit,
+  Error
 } from './style'
 
 interface dataTypeItem {
@@ -53,7 +54,6 @@ const Form = ({formData}: {formData: dataType}) => {
     let validation = formItem.validation
     validationObject[name] = validation
   });
-
   const schema = yup.object().shape(validationObject)
   const [optionArray, setOptionArray ] = useState<stateType> ([])
   const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
@@ -70,11 +70,10 @@ const Form = ({formData}: {formData: dataType}) => {
         'radio': options?.map((option: string, index: number) => {
           return(
             <>
-              <OptContainer key={option} size={options.length} onClick={() => setValue(name, option)}>
+              <OptContainer key={option} size={options.length} onClick={() => setValue(name, option,  { shouldValidate: true })}>
                 <input type='radio' id={option} value={option} {...register(name) } />
                 <Label htmlFor={option}>{option}</Label>
               </OptContainer>
-              { options.length -1 === index && <p>{errors[name]?.message}</p>}
             </>
 
           )
@@ -85,10 +84,10 @@ const Form = ({formData}: {formData: dataType}) => {
               const optionFilter = optionArray.filter(i => {
                 return i !== value
               })
-              setValue(name, optionFilter);
+              setValue(name, optionFilter,  { shouldValidate: true });
               return optionFilter
             }): setOptionArray(prevOptions => {
-              setValue(name, [...optionArray, value]);
+              setValue(name, [...optionArray, value],{ shouldValidate: true });
               return [...optionArray, value]
             })
 
@@ -108,7 +107,6 @@ const Form = ({formData}: {formData: dataType}) => {
                   />
                   <Label>{option}</Label>
                 </OptContainer>
-            { (options.length -1) === index && <p>{errors[name]?.message}</p>}
             </>
           )
         }),
@@ -130,18 +128,20 @@ const Form = ({formData}: {formData: dataType}) => {
                   })
                 }
               </Select>
-              <p>{errors[name]?.message}</p>
             </div>
         ),
         'date': (
           <>
             <Date type={'date'} {...register(`${name}`)}/>
-            <p>{errors[name]?.message}</p>
           </>
         )
       };
 
-      const defaultInput = <Input type={type} placeholder='Type your answer here...' {...register(`${name}`)}/>
+      const defaultInput = (
+        <>
+          <Input type={type} placeholder='Type your answer here...' {...register(`${name}`)}/>
+        </>
+      )
 
       const value = cases[type] || defaultInput;
       return value;
@@ -161,10 +161,18 @@ const Form = ({formData}: {formData: dataType}) => {
                     {
                       (type==="checkbox" || type==="radio") ?
                         (
-                          <InputContainer size={options}>
+                          <>
+                            <InputContainer size={options}>
                             {inputGenerator(formItem)}
-                          </InputContainer>
-                        ): inputGenerator(formItem)
+                            </InputContainer>
+                            <Error>{errors[formItem.name]?.message}</Error>
+                          </>
+                        ): (
+                          <>
+                            {inputGenerator(formItem)}
+                            <Error>{errors[formItem.name]?.message}</Error>
+                          </>
+                        )
                     }
                     {
                       (keys.length - 1 === index) && <Submit type='submit' />
