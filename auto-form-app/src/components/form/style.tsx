@@ -11,6 +11,10 @@ export const Label = styled.label`
 color: ${white};
 cursor: pointer;
 `
+export const Error = styled.p`
+color: #FF6363;
+font-size: 18px;
+`
 
 // Containers Section
 
@@ -90,12 +94,12 @@ width: 100%;
 font-size: 25px;
 border: none;
 color: rgba(${themeColor});
-background-color: rgba(${themeColor}, .5);
+background-color: transparent;
 padding-bottom: 10px;
 cursor: text;
+border-bottom: 2px solid rgba(${themeColor}) ;
 :focus {
         outline: none;
-        border-bottom: 2px solid rgba(${themeColor}) ;
     }
 ::placeholder {
     color: rgba(${themeColor}, .5);
