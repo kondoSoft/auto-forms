@@ -1,25 +1,25 @@
+import * as yup from "yup";
+
 const data = {
     item: {
         question: 'What is your name?',
-        isRequired: true,
-        validation: ['required', 'string',],
+        validation:  yup.string().required(),
         type: 'date',
-        name: 'name'
+        name: 'date'
     },
     item2: {
-        question: 'Sex',
-        isRequired: true,
-        validation: ['required'],
+        question: 'Gender',
+        validation: yup.string().required(),
         type: 'radio',
-        name: 'Sex',
+        name: 'Gender',
         options: ['Male', 'Female']
     },
     item3: {
         question: "What's your favorite flavor?",
-        isRequired: true,
-        validation:  ['required'],
+        validation: yup.string().matches(/(Chocolate)|(Vanilla)|(Strawberry)|(Capuccino)|(Cookies and Cream)/).required(),
         type: 'dropdown-list',
         name: 'Ice Cream Flavors',
+        defaultOption: 'seleccione un sabor',
         options: [
             'Chocolate',
             'Vanilla',
@@ -30,8 +30,7 @@ const data = {
     },
     item4: {
         question: 'Colors',
-        isRequired: true,
-        validation: ['required'],
+        validation: yup.array().of(yup.string('Brown', 'Black', 'white', 'Grey', 'Red Hair')).required(),
         type: 'checkbox',
         name: 'colors',
         options: ['Brown', 'Black', 'white', 'Grey', 'Red Hair']

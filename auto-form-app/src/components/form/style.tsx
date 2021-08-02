@@ -9,6 +9,7 @@ color: ${white};
 `
 export const Label = styled.label`
 color: ${white};
+cursor: pointer;
 `
 
 // Containers Section
@@ -64,6 +65,7 @@ padding: 15px 30px 15px 0;
 border: 3px rgba(${themeColor}) solid;
 border-radius: 5px;
 background-color: rgba(${themeColor}, .3);
+cursor: pointer;
 `
 
 // Select Container
@@ -75,6 +77,7 @@ border: 3px rgba(${themeColor}) solid;
 border-radius: 5px;
 color: ${white};
 padding: 5px 0;
+cursor: pointer;
 :focus {
         outline: none;
     }
@@ -89,6 +92,7 @@ border: none;
 color: rgba(${themeColor});
 background-color: rgba(${themeColor}, .5);
 padding-bottom: 10px;
+cursor: text;
 :focus {
         outline: none;
         border-bottom: 2px solid rgba(${themeColor}) ;
@@ -105,11 +109,13 @@ padding: 10px;
 background-color: rgba(${themeColor}, .5);
 border: 3px rgba(${themeColor}) solid;
 border-radius: 5px;
+cursor: text;
 :focus {
         outline: none;
     }
 ::-webkit-calendar-picker-indicator {
     filter: invert(1);
+    cursor: pointer;
 }
 `
 

@@ -18,19 +18,12 @@ import {
   Submit
 } from './style'
 
-const schema = yup.object().shape({
-    name: yup.string().required(),
-    sex: yup.string().required(),
-    'Ice Cream Flavors': yup.string().required(),
-    colors: yup.array().required(),
-})
-
 interface dataTypeItem {
   question: string,
-  isRequired: boolean,
-  validation?: string[],
+  validation?: any,
   type: string,
   name: string,
+  defaultOption?: string,
   options?: string[]
 }
 
@@ -46,29 +39,42 @@ interface casesType {
 }
 type stateType = string[]
 
+interface YupShape {
+  [key: string]: any
+}
+
 const Form = ({formData}: {formData: dataType}) => {
 
+  const keys = Object.keys(formData);
+  let validationObject: YupShape = {}
+  keys.forEach(key => {
+    let formItem = formData[key]
+    let name = formItem.name
+    let validation = formItem.validation
+    validationObject[name] = validation
+  });
+
+  const schema = yup.object().shape(validationObject)
   const [optionArray, setOptionArray ] = useState<stateType> ([])
-  const { register, handleSubmit, formState:{ errors }, setValue } = useForm(
-    {resolver: yupResolver(schema)}
-  );
-  const onSubmit = (data: any) => {
+  const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
+    resolver: yupResolver(schema)
+  });
+
+  const onSubmit = (data: dataTypeItem) => {
     console.log(data);
   };
-    const keys = Object.keys(formData);
-
     const inputGenerator = (data: dataTypeItem) => {
-      const {type, name, options }= data;
+      const {type, name, options, defaultOption }= data;
 
       const cases: casesType = {
         'radio': options?.map((option: string, index: number) => {
           return(
             <>
               <OptContainer key={option} size={options.length} onClick={() => setValue(name, option)}>
-                <input type='radio' id={option} value={option} {...register(name)} />
+                <input type='radio' id={option} value={option} {...register(name) } />
                 <Label htmlFor={option}>{option}</Label>
               </OptContainer>
-              { (options.length -1) === index && <p>{errors[name]?.message}</p>}
+              { options.length -1 === index && <p>{errors[name]?.message}</p>}
             </>
 
           )
@@ -89,11 +95,10 @@ const Form = ({formData}: {formData: dataType}) => {
           }
           return(
             <>
-                <OptContainer key={option} size={options.length}
-                  onClick={() => {
-                    check(option);
-
-                  }}
+                <OptContainer
+                  key={option}
+                  size={options.length}
+                  onClick={() => check(option)}
                 >
                   <input
                     type='checkbox'
@@ -107,10 +112,13 @@ const Form = ({formData}: {formData: dataType}) => {
             </>
           )
         }),
-        'dropdown-list':
-            <div>
+        'dropdown-list':(
+          <div>
               <Text>Choose a {name}:</Text>
               <Select {...register(`${name}`)}>
+                <Option key={defaultOption} value={defaultOption}>
+                  {defaultOption}
+                </Option>
                 {
                   options?.map((listItem: string) => {
                     return(
@@ -123,11 +131,14 @@ const Form = ({formData}: {formData: dataType}) => {
                 }
               </Select>
               <p>{errors[name]?.message}</p>
-            </div>,
-          'date': <>
-                    <Date type={'date'} {...register(`${name}`)}/>
-                    <p>{errors[name]?.message}</p>
-                  </>
+            </div>
+        ),
+        'date': (
+          <>
+            <Date type={'date'} {...register(`${name}`)}/>
+            <p>{errors[name]?.message}</p>
+          </>
+        )
       };
 
       const defaultInput = <Input type={type} placeholder='Type your answer here...' {...register(`${name}`)}/>
