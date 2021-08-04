@@ -70,7 +70,7 @@ const Form = ({formData}: {formData: dataType}) => {
 
   useEffect(()=> {
     fields === keySize && setStateLoading(false)
-  });
+  }, [fields, keySize]);
 
   const onSubmit = (data: dataTypeItem) => {
     console.log(data);
