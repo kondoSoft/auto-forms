@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useForm } from "react-hook-form";
 import './style.tsx';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import Loading  from '../loading/Loading'
 import {
   Text,
   Container,
@@ -16,7 +17,7 @@ import {
   Select,
   Option,
   Submit,
-  Error
+  Error,
 } from './style'
 
 interface dataTypeItem {
@@ -38,6 +39,7 @@ interface casesType {
   // 'checkbox': JSX.Element[] | undefined
   // 'dropdown-list': JSX.Element
 }
+
 type stateType = string[]
 
 interface YupShape {
@@ -47,21 +49,32 @@ interface YupShape {
 const Form = ({formData}: {formData: dataType}) => {
 
   const keys = Object.keys(formData);
+  const keySize = keys.length
   let validationObject: YupShape = {}
+
   keys.forEach(key => {
     let formItem = formData[key]
     let name = formItem.name
     let validation = formItem.validation
     validationObject[name] = validation
   });
+
   const schema = yup.object().shape(validationObject)
   const [optionArray, setOptionArray ] = useState<stateType> ([])
-  const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
+  const [stateLoading, setStateLoading] = useState(true)
+  const { register, handleSubmit, formState:{ errors }, setValue , reset} = useForm({
     resolver: yupResolver(schema)
   });
 
+  const fields = Object.keys(schema.fields).length
+
+  useEffect(()=> {
+    fields === keySize && setStateLoading(false)
+  }, [fields, keySize]);
+
   const onSubmit = (data: dataTypeItem) => {
     console.log(data);
+    reset()
   };
     const inputGenerator = (data: dataTypeItem) => {
       const {type, name, options, defaultOption }= data;
@@ -148,8 +161,7 @@ const Form = ({formData}: {formData: dataType}) => {
     }
     return(
         <Container onSubmit={handleSubmit(onSubmit)}>
-         {
-            keys.map(
+          { stateLoading ? <Tile><Loading /></Tile> : keys.map(
               (key, index) => {
                 let formItem = formData[key]
                 let options = formItem.options?.length || 0
@@ -179,8 +191,7 @@ const Form = ({formData}: {formData: dataType}) => {
                     }
                   </Question>
                  </Tile>
-                )
-              }
+                )}
             )
           }
         </Container>
