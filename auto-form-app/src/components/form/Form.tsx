@@ -124,7 +124,7 @@ const Form = ({formData}: {formData: dataType}) => {
           )
         }),
         'dropdown-list':(
-          <div>
+          <>
               <Text>Choose a {name}:</Text>
               <Select {...register(`${name}`)}>
                 <Option key={defaultOption} value={defaultOption}>
@@ -141,7 +141,7 @@ const Form = ({formData}: {formData: dataType}) => {
                   })
                 }
               </Select>
-            </div>
+            </>
         ),
         'date': (
           <>
