@@ -4,8 +4,13 @@ const white = '#FFFFFF';
 
 // Typography Section
 export const Text = styled.p`
-font-size: 25px;
+font-size: 1.6rem;
 color: ${white};
+
+@media(max-width: 450px) {
+    font-size: 1.2rem;
+    margin-top: 0;
+}
 `
 export const Label = styled.label`
 color: ${white};
@@ -13,7 +18,7 @@ cursor: pointer;
 `
 export const Error = styled.p`
 color: #FF6363;
-font-size: 18px;
+font-size: 1.1rem;
 `
 
 // Containers Section
@@ -39,9 +44,19 @@ scroll-snap-align: start;
 
 // Question Container
 export const  Question = styled.div`
-
 width: 40%;
 height: 20%;
+
+@media (max-width: 768px) {
+    width: 70%;
+}
+
+@media (max-width: 450px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
 `
 
 // Input Container
@@ -55,6 +70,17 @@ display: ${(props) => {
     }
 }};
 grid-template-columns: 1fr 1fr 1fr;
+grid-column-gap: .5rem;
+
+@media (max-width: 450px) {
+    width: 100%;
+    display: ${(props) => {
+        if (props.size && props.size > 1) {
+            return 'grid'
+        }
+    }};
+    grid-template-columns: 1fr 1fr;
+}
 `
 
 // Options Container
@@ -70,12 +96,16 @@ border: 3px rgba(${themeColor}) solid;
 border-radius: 5px;
 background-color: rgba(${themeColor}, .3);
 cursor: pointer;
+
+@media (max-width: 450px) {
+    width: auto;
+}
 `
 
 // Select Container
 export const Select = styled.select`
 width: 50%;
-font-size: 18px;
+font-size: 1.1rem;
 background-color: rgba(${themeColor}, .3);
 border: 3px rgba(${themeColor}) solid;
 border-radius: 5px;
@@ -85,13 +115,17 @@ cursor: pointer;
 :focus {
         outline: none;
     }
+
+@media (max-width: 450px) {
+    width: 100%;
+}
 `
 
 // Inputs Section
 
 export const Input = styled.input`
 width: 100%;
-font-size: 25px;
+font-size: 1.6rem;
 border: none;
 color: rgba(${themeColor});
 background-color: transparent;
@@ -104,9 +138,12 @@ border-bottom: 2px solid rgba(${themeColor}) ;
 ::placeholder {
     color: rgba(${themeColor}, .5);
 }
+@media (max-width: 768px) {
+    font-size: 1.2rem;
+}
 `
 export const Date = styled.input`
-font-size: 25px;
+font-size: 1.6rem;
 width: 45%;
 color: ${white};
 padding: 10px;
@@ -120,6 +157,14 @@ cursor: text;
 ::-webkit-calendar-picker-indicator {
     filter: invert(1);
     cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 450px) {
+    width: 80%;
 }
 `
 
@@ -145,5 +190,9 @@ transition: background 2s;
     cursor: pointer;
     background: #A76EC7;
     border: solid 4px #732E99;
+}
+
+@media (max-width: 450px) {
+    width: 100%;
 }
 `
